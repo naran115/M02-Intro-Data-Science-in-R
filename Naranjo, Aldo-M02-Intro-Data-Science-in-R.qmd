@@ -1,0 +1,187 @@
+---
+title: "M02-Introduction to Data Science in R-Reflection"
+author: "Aldo Naranjo"
+date: '`r format(Sys.time())`'
+format: 
+  html: 
+    toc: true
+    toc-depth: 4
+    toc-expand: 2
+    toc-title: "Contents"
+    number-sections: true
+    code-link: true
+    embed-resources: true
+    theme: cosmo
+    highlight-style: github
+    code-fold: show
+    code-tools: true
+    code-overflow: wrap
+    df-print: paged
+editor: visual
+execute: 
+  freeze: auto
+---
+
+## Overview {.unnumbered}
+
+::: callout-note
+## How to read this report
+
+Each assignment prompt appears in a blockquote, and my response follows directly underneath it. I work as a PPC analyst, so most of my examples come from paid search reporting rather than from academic research.
+:::
+
+# Reproducible Data Science and Literate Coding
+
+> *Summarize new things you learned in this module about reproducible data science and literate coding.*
+
+Before this module I thought of reproducibility as a research problem, something that applied to published studies rather than to the monthly reporting I actually do. The distinction the Duke workshop drew between reproducibility and replicability changed that. Reproducibility means someone takes my data, my code, and my documented steps and arrives at the same numbers I did. Replicability means they go gather their own data and test the same question independently. Nearly everything I produce falls into the first category, and nearly none of it is currently built to survive that test.
+
+The idea that stuck with me most was the reproducibility spectrum. It is not a pass or fail condition. A finished report with nothing behind it sits at one end, code posted publicly sits further along, code and data together sits further still, and a linked executable environment sits near the far end. That framing made the whole topic feel workable instead of intimidating, because it means any single improvement moves you along the line.
+
+A few specific practices I had never considered:
+
+-   Keeping raw data separate from analysis data and never editing the original, including zipping it and marking it read only
+-   Writing a README that explains what the files are and how they relate, rather than assuming the folder structure speaks for itself
+-   Building a data appendix that defines every variable, its coding, and its distribution, so the numbers can still be interpreted if the file gets separated from its context
+-   Naming files with a convention that scales, including leading zeros when a sequence is involved
+
+::: {.callout-tip collapse="true"}
+## The ten year code challenge
+
+A neuroscientist challenged researchers to go back and run their own decade old code. Most could not, and the common causes were missing documentation and obsolete computing environments rather than broken logic. The people who struggled most were the ones who had never commented their code, which turned their own work into something unreadable to themselves.
+:::
+
+Literate coding was the other genuinely new concept. The old approach is commenting a script with hash marks, which works but encourages short cryptic notes because writing prose inside a code file is awkward. Literate coding inverts that. The document is written in natural language with code chunks embedded inside it, so explanation is the default rather than an afterthought. The practical consequence is that the same source file can render to HTML, PDF, Word, or slides, and the analysis only has to be written once.
+
+# The Quarto Lecture
+
+> *Summarize the instructor's lecture about Quarto that you found impressive. Do you see yourself using Quarto every day for your job or study, like taking notes in your class or preparing a presentation?*
+
+The part of the Quarto material that impressed me most was that it works across R and Python rather than being tied to either one. R Markdown required an R runtime because the preprocessing happened in R packages. Quarto moves that preprocessing into Pandoc and Lua filters, so the language becomes a swappable component. An R user working through knitr and a Python user working through Jupyter can sit in the same project, use identical markdown and YAML syntax, and render to the same output. Neither one has to install the other's language.
+
+That matters more than it first appears. Most of the collaboration friction I have seen in analytics work is not about who writes better code. It is about tooling mismatches that force one person to work in an environment they do not know well. Quarto sidesteps that instead of trying to win the argument.
+
+The instructor's advanced codebook also made the YAML header feel less like boilerplate. Options like `toc-depth`, `code-fold`, `code-tools`, and `embed-resources` each control something specific about how a reader experiences the document, and the linting and autocompletion in RStudio mean I do not have to memorize them.
+
+Being honest about the second half of the prompt: I do not expect to use Quarto every day outside of class right now. My daily reporting runs through Google Ads, GA4, CallRail, and Looker Studio, and the deliverables go to clients who want a clean summary rather than a document with code behind it. Introducing Quarto into that would mean rebuilding a workflow that currently works and that my team already understands.
+
+What I can see is narrower and more realistic. Coursework is the obvious place, since I am already producing HTML reports for this program. Beyond that, the recurring analyses I rebuild by hand every month are the strongest candidates, because those are exactly the tasks where writing the logic once and rerunning it would pay off. If that goes well, the case for expanding it makes itself.
+
+# The Reproducibility Crisis
+
+> *Summarize the video presentation about reproducibility crisis. What do you think about reproducible crisis in your field? How can Quarto help address the concerns you have about reproducibility in the line of your work?*
+
+The presentation opened with a Nature survey in which close to ninety percent of researchers said there was either a significant or a slight reproducibility crisis in their field.[^1] The more striking figure was how many reported failing to reproduce not just someone else's experiment but their own earlier work. That reframed the problem for me. It is not primarily about fraud or carelessness. It is about the ordinary decay of undocumented process over time.
+
+[^1]: Nature surveyed over fifteen hundred researchers in 2016 about reproducibility. A large majority identified a crisis, and a substantial share reported having failed to reproduce their own prior results.
+
+The example the speaker used was a menu driven statistics workflow where output gets copied into Excel, screenshotted into slides, and typed by hand into a manuscript. Every one of those handoffs is a place where an error can enter silently and where the trail disappears.
+
+Marketing analytics has the same problem in a different costume. The weak point in my own field is that nobody documents what changed. Accounts get modified constantly. Bid strategies get switched, budgets get reallocated, ad groups get paused, conversion actions get redefined, and platforms auto apply changes without being asked. Three months later the performance chart shows a shift and the honest answer is often that no one remembers exactly what caused it. The change history log exists, but reading it is archaeology, not documentation. Nobody wrote down why.
+
+There is a second layer specific to advertising platforms, which is that the underlying data is not stable. Attribution models get revised, conversion counts backfill, and a number pulled in January may not match the same number pulled in March. That means a report without a stated pull date and a stated methodology is not reproducible even in principle.
+
+Quarto helps with the documentation gap directly. If the analysis, the reasoning, and the output all live in one source file, then the explanation of why a change was made travels with the evidence for it instead of living in someone's memory or a buried Slack thread. Combined with version control, every render becomes a dated snapshot showing both the numbers and the logic that produced them. That does not fix the platform data instability, but it does mean I could state exactly when data was pulled and how it was processed, which is most of what a future reader would need.
+
+# The Tidyverse Ecosystem
+
+> *Summarize what you learned in this module about the Tidyverse ecosystem in R. What can you do with R?*
+
+The Tidyverse is a collection of packages built around a shared philosophy and a shared data structure, so the syntax stays consistent as you move between tasks. The unifying idea is tidy data, which means every variable is a column, every observation is a row, and every cell holds one value. Once data is in that shape, the same set of verbs works on it regardless of where it came from.
+
+The workflow follows a predictable sequence, shown in @tbl-tidyverse.
+
+| Stage | Package | What it handles |
+|----|----|----|
+| Import | readr, readxl, haven | Flat files, Excel workbooks, SPSS and Stata files |
+| Tidy | tidyr | Pivoting between long and wide, separating and uniting columns |
+| Transform | dplyr | filter, arrange, select, mutate, group_by, summarize |
+| Visualize | ggplot2 | Layered graphics built on the grammar of graphics |
+| Program | purrr, stringr, forcats | Iteration, strings, factors |
+
+: Core Tidyverse packages and their role in the data science workflow {#tbl-tidyverse}
+
+The pipe was the concept that made the syntax click for me. It reads as "and then," which turns an analysis into a linear sequence rather than a nest of functions read from the inside out or a chain of throwaway objects.
+
+```{r}
+#| label: dplyr-demo
+#| message: false
+#| warning: false
+
+library(tidyverse)
+
+mtcars |>
+  group_by(cyl) |>
+  summarize(
+    mean_mpg = mean(mpg),
+    sd_mpg = sd(mpg),
+    n = n()
+  )
+```
+
+The ggplot2 half rests on the grammar of graphics, which breaks any chart into data, an aesthetic mapping, and a geometric object. The payoff is that switching from points to bars to boxplots is a change of one layer rather than a different package with different syntax.
+
+```{r}
+#| label: fig-mpg
+#| fig-cap: "Fuel efficiency by cylinder count in the mtcars dataset"
+#| message: false
+#| warning: false
+
+mtcars |>
+  mutate(cyl = factor(cyl)) |>
+  ggplot(aes(x = cyl, y = mpg, fill = cyl)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(x = "Cylinders", y = "Miles per gallon") +
+  theme_minimal()
+```
+
+@fig-mpg took three lines of grammar rather than a chart wizard, and more importantly it will regenerate identically the next time the data updates.
+
+As for what I can do with R, the honest answer after one module is that I can import data from most common formats, reshape it, filter and group and summarize it, build a chart that is presentable rather than just readable, and wrap the whole thing in a document that explains itself. That is already the shape of most of my monthly reporting work.
+
+# Two Packages Beyond the Tidyverse
+
+> *Refer to the video introducing two 20 packages. Among the various packages introduced, choose two packages beyond the Tidyverse ecosystem, base R, and Quarto that could enhance your job/career. Tell me why you think so.*
+
+::: panel-tabset
+## shiny and shinydashboard
+
+Client reporting in paid search has a recurring problem. The client wants to see a specific slice of the data, they ask for it after the report has already been delivered, and answering means going back into the platform and rebuilding a view by hand. A Shiny application changes the shape of that exchange. Instead of sending a fixed document, I could send something the client filters themselves by date range, campaign, or channel.
+
+Shinydashboard is the piece that makes this presentable. It structures an application into a header, a sidebar, and a body, which is roughly the layout a client already expects from a reporting interface. That matters because the barrier to adoption is rarely functionality, it is whether the thing looks like a tool the client recognizes.
+
+The broader career argument is that building an interactive application is a different skill level than producing a chart, and it is the point where R stops being an analysis tool and starts being a delivery platform.
+
+## plotly
+
+Static charts answer the question I anticipated. Interactive charts let the reader answer the questions I did not anticipate. In a monthly performance review, the follow up is almost always about a specific point on the line, and hovering to read the exact value or zooming into one week is faster than me pulling a second export.
+
+Plotly is a reasonable next step specifically because it sits close to what I would already be learning. There is a grammar of graphics logic underneath it, so the mental model carries over from ggplot2 rather than starting fresh. It also has implementations in both R and Python, which fits the cross language point from earlier in this reflection.
+
+Paired with Shiny, plotly is what makes the dashboard worth interacting with rather than just a set of filters over static images.
+:::
+
+# R versus Python
+
+> *Refer to the debate on R vs. Python. What is your take on this debate? In your response, consider how Quarto enables people using R and Python in the same team to still collaborate.*
+
+My take is that it depends entirely on the role, and I think framing it as a debate is the actual mistake.
+
+The video made the case reasonably well. R has the edge for statistics, data visualization, and structured learning material, largely because of the Tidyverse and the grammar of graphics. Python has the edge for general purpose programming, integration into engineering pipelines, deep learning, and community size. Neither of those lists describes a better language. They describe different jobs.
+
+If someone is heading into data engineering or building production systems, Python is the obvious starting point. If someone is doing analysis, statistics, or visualization heavy work, R will get them productive faster. For where I sit, working with campaign performance data and client reporting, R fits better right now, though that would change immediately if my role shifted toward pipeline work.
+
+The video's blunter advice was also fair, which is that people asking this question are often researching as a way of avoiding starting. The fundamentals of programming transfer between the two, so the cost of picking the less optimal one first is much smaller than the cost of not picking.
+
+::: callout-important
+## Where Quarto changes the question
+
+Quarto executes code through an engine rather than through one language's runtime, so knitr handles R and Jupyter handles Python inside the same project. The markdown, the YAML, the callouts, the layout syntax, and the cross referencing are identical either way.
+:::
+
+This is what makes the debate feel less consequential than it is usually presented. A team does not have to standardize on one language to produce one coherent deliverable. Two analysts can work in their own tools, freeze their computed output so neither has to install the other's environment, pass data between stages, and render a single shared report. The question stops being which language wins and becomes which language fits this person and this task.
+
+# Appendix {.unnumbered}
+
+-   [GitHub Repository](https://github.com/naran115/M02-Intro-Data-Science-in-R)
+-   [Published Report on GitHub Pages](https://naran115.github.io/M02-Intro-Data-Science-in-R/Naranjo,%20Aldo-M02-Intro-Data-Science-in-R.html)
